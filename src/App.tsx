@@ -2,13 +2,13 @@ import React from 'react';
 import './app.css';
 import AuthComponent from './presentation/view/auth/AuthComponent';
 import AuthViewModelImpl from './presentation/view-model/auth/AuthViewModelImpl';
-import AuthRepositoryImpl from './data/auth/AuthRepositoryImpl';
+import AuthRepositoryFakeApi from './data/auth/AuthRepositoryApi';
 import LoginUseCase from './domain/interactors/auth/LoginUseCase';
 import AuthHolder from './domain/entity/auth/models/AuthHolder';
 
 function App(): JSX.Element {
   // data layer
-  const authRepository = new AuthRepositoryImpl();
+  const authRepository = new AuthRepositoryFakeApi();
   // domain layer
   const authHolder = new AuthHolder();
   const loginUseCase = new LoginUseCase(authRepository, authHolder);
