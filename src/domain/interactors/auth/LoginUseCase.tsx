@@ -1,5 +1,4 @@
 import AuthRepository from '../../repository/auth/AuthRepository';
-import AuthorizationResult from '../../entity/auth/stuctures/AuthorizationResult';
 import AuthHolder from '../../entity/auth/models/AuthHolder';
 
 export default class LoginUseCase {
@@ -14,7 +13,7 @@ export default class LoginUseCase {
   /**
    * @throws {Error} if credentials are not valid or have not passed
    */
-  public async loginUser(email: string, password: string): Promise<AuthorizationResult> {
+  public async loginUser(email: string, password: string): Promise<void> {
     const validationResult = await this.authRepository.validateCredentials(email, password);
     const authResult = await this.authRepository.login(
       email,
@@ -23,7 +22,5 @@ export default class LoginUseCase {
     );
 
     this.authHolder.onSignedIn(authResult.authorizationToken);
-
-    return authResult;
   }
 }

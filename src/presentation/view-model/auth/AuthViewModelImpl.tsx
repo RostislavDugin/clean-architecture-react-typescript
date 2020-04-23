@@ -91,7 +91,7 @@ export default class AuthViewModelImpl implements AuthViewModel, AuthListener {
     this.notifyViewAboutChanges();
   };
 
-  public onClickSignOut = async (): Promise<void> => {
+  public onClickSignOut = (): void => {
     this.authHolder.onSignedOut();
   };
 
