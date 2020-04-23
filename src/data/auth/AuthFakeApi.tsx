@@ -2,7 +2,7 @@ import AuthRepository from '../../domain/repository/auth/AuthRepository';
 import ValidationResult from '../../domain/entity/auth/stuctures/ValidationResult';
 import AuthorizationResult from '../../domain/entity/auth/stuctures/AuthorizationResult';
 
-export default class AuthRepositoryFakeApi implements AuthRepository {
+export default class AuthFakeApi implements AuthRepository {
   /**
    * @throws {Error} if validation has not passed
    */
