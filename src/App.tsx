@@ -1,7 +1,7 @@
 import React from 'react';
 import './app.css';
-import AuthComponent from './view/view/auth/AuthComponent';
-import AuthViewModelImpl from './view/view-model/auth/AuthViewModelImpl';
+import AuthComponent from './presentation/view/auth/AuthComponent';
+import AuthViewModelImpl from './presentation/view-model/auth/AuthViewModelImpl';
 import AuthRepositoryImpl from './data/auth/AuthRepositoryImpl';
 import LoginUseCase from './domain/interactors/auth/LoginUseCase';
 import AuthHolder from './domain/entity/auth/models/AuthHolder';
