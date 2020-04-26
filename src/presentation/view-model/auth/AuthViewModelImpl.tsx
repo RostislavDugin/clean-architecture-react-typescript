@@ -1,81 +1,57 @@
 import AuthViewModel from './AuthViewModel';
-import BaseView from '../../view/BaseView';
 import LoginUseCase from '../../../domain/interactors/auth/LoginUseCase';
 import AuthHolder from '../../../domain/entity/auth/models/AuthHolder';
-import AuthListener from '../../../domain/entity/auth/models/AuthListener';
 import FormValidator from '../../util/FormValidator';
+import { computed, observable } from "mobx";
 
-export default class AuthViewModelImpl implements AuthViewModel, AuthListener {
-  public emailQuery: string;
-  public passwordQuery: string;
-  public isSignInButtonVisible: boolean;
-  public isSignOutButtonVisible: boolean;
+export default class AuthViewModelImpl implements AuthViewModel {
+  @observable public emailQuery: string;
+  @observable public passwordQuery: string;
 
-  public isShowError: boolean;
-  public errorMessage: string;
+  @observable public isShowError: boolean;
+  @observable public errorMessage: string;
 
-  public authStatus: string;
-  public isAuthStatusPositive: boolean;
-
-  private baseView?: BaseView;
   private loginUseCase: LoginUseCase;
   private authHolder: AuthHolder;
 
   public constructor(loginUseCase: LoginUseCase, authHolder: AuthHolder) {
     this.emailQuery = '';
     this.passwordQuery = '';
-    this.isSignInButtonVisible = true;
-    this.isSignOutButtonVisible = false;
 
     this.isShowError = false;
     this.errorMessage = '';
 
-    this.authStatus = 'is not authorized';
-    this.isAuthStatusPositive = false;
 
     this.loginUseCase = loginUseCase;
     this.authHolder = authHolder;
   }
 
-  public attachView = (baseView: BaseView): void => {
-    this.baseView = baseView;
-    this.authHolder.addAuthListener(this);
-  };
+  @computed public get isSignInButtonVisible() {
+    return !this.authHolder.isUserAuthorized
+  }
 
-  public detachView = (): void => {
-    this.baseView = undefined;
-    this.authHolder.removeAuthListener(this);
-  };
+  @computed public get isSignOutButtonVisible() {
+    return this.authHolder.isUserAuthorized
+  }
 
-  public onAuthChanged = (): void => {
-    if (this.authHolder.isUserAuthorized()) {
-      this.isSignInButtonVisible = false;
-      this.isSignOutButtonVisible = true;
-      this.authStatus = 'authorized';
-      this.isAuthStatusPositive = true;
-    } else {
-      this.isSignInButtonVisible = true;
-      this.isSignOutButtonVisible = false;
-      this.authStatus = 'is not autorized';
-      this.isAuthStatusPositive = false;
-    }
+  @computed public get authStatus() {
+    return this.authHolder.isUserAuthorized ? 'authorized' : 'is not autorized';
+  }
 
-    this.notifyViewAboutChanges();
-  };
+  @computed public get isAuthStatusPositive() {
+    return this.authHolder.isUserAuthorized
+  }
 
   public onEmailQueryChanged = (loginQuery: string): void => {
     this.emailQuery = loginQuery;
-    this.notifyViewAboutChanges();
   };
 
   public onPasswordQueryChanged = (passwordQuery: string): void => {
     this.passwordQuery = passwordQuery;
-    this.notifyViewAboutChanges();
   };
 
   public onClickSignIn = async (): Promise<void> => {
     if (!this.validateLoginForm()) {
-      this.notifyViewAboutChanges();
       return;
     }
 
@@ -87,8 +63,6 @@ export default class AuthViewModelImpl implements AuthViewModel, AuthListener {
       this.errorMessage = e.message;
       this.isShowError = true;
     }
-
-    this.notifyViewAboutChanges();
   };
 
   public onClickSignOut = (): void => {
@@ -128,10 +102,4 @@ export default class AuthViewModelImpl implements AuthViewModel, AuthListener {
 
     return true;
   }
-
-  private notifyViewAboutChanges = (): void => {
-    if (this.baseView) {
-      this.baseView.onViewModelChanged();
-    }
-  };
 }

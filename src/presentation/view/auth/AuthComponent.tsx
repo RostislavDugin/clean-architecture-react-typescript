@@ -1,71 +1,13 @@
 import React from 'react';
 import './auth-component.css';
-import BaseView from '../BaseView';
 import AuthViewModel from '../../view-model/auth/AuthViewModel';
+import { observer } from "mobx-react";
 
 export interface AuthComponentProps {
   authViewModel: AuthViewModel;
 }
-
-export interface AuthComponentState {
-  emailQuery: string;
-  passwordQuery: string;
-  isSignInButtonVisible: boolean;
-  isSignOutButtonVisible: boolean;
-
-  isShowError: boolean;
-  errorMessage: string;
-
-  authStatus: string;
-  isAuthStatusPositive: boolean;
-}
-
-export default class AuthComponent extends React.Component<AuthComponentProps, AuthComponentState>
-  implements BaseView {
-  private authViewModel: AuthViewModel;
-
-  public constructor(props: AuthComponentProps) {
-    super(props);
-
-    const { authViewModel } = this.props;
-    this.authViewModel = authViewModel;
-
-    this.state = {
-      emailQuery: authViewModel.emailQuery,
-      passwordQuery: authViewModel.passwordQuery,
-      isSignInButtonVisible: authViewModel.isSignInButtonVisible,
-      isSignOutButtonVisible: authViewModel.isSignOutButtonVisible,
-
-      isShowError: authViewModel.isShowError,
-      errorMessage: authViewModel.errorMessage,
-
-      authStatus: authViewModel.authStatus,
-      isAuthStatusPositive: authViewModel.isAuthStatusPositive,
-    };
-  }
-
-  public componentDidMount(): void {
-    this.authViewModel.attachView(this);
-  }
-
-  public componentWillUnmount(): void {
-    this.authViewModel.detachView();
-  }
-
-  public onViewModelChanged(): void {
-    this.setState({
-      emailQuery: this.authViewModel.emailQuery,
-      passwordQuery: this.authViewModel.passwordQuery,
-      isSignInButtonVisible: this.authViewModel.isSignInButtonVisible,
-      isSignOutButtonVisible: this.authViewModel.isSignOutButtonVisible,
-
-      isShowError: this.authViewModel.isShowError,
-      errorMessage: this.authViewModel.errorMessage,
-
-      authStatus: this.authViewModel.authStatus,
-      isAuthStatusPositive: this.authViewModel.isAuthStatusPositive,
-    });
-  }
+@observer
+export default class AuthComponent extends React.Component<AuthComponentProps> {
 
   public render(): JSX.Element {
     const {
@@ -79,7 +21,7 @@ export default class AuthComponent extends React.Component<AuthComponentProps, A
 
       authStatus,
       isAuthStatusPositive,
-    } = this.state;
+    } = this.props.authViewModel;
 
     return (
       <div className="row flex-grow-1 d-flex justify-content-center align-items-center">
@@ -96,7 +38,7 @@ export default class AuthComponent extends React.Component<AuthComponentProps, A
               type="text"
               placeholder="user@email.com"
               onChange={(e: React.FormEvent<HTMLInputElement>): void => {
-                this.authViewModel.onEmailQueryChanged(e.currentTarget.value);
+                this.props.authViewModel.onEmailQueryChanged(e.currentTarget.value);
               }}
               value={emailQuery}
               className="form-control"
@@ -107,7 +49,7 @@ export default class AuthComponent extends React.Component<AuthComponentProps, A
               type="password"
               placeholder="password"
               onChange={(e: React.FormEvent<HTMLInputElement>): void => {
-                this.authViewModel.onPasswordQueryChanged(e.currentTarget.value);
+                this.props.authViewModel.onPasswordQueryChanged(e.currentTarget.value);
               }}
               value={passwordQuery}
               className="form-control"
@@ -123,7 +65,7 @@ export default class AuthComponent extends React.Component<AuthComponentProps, A
               <button
                 type="button"
                 className="col btn btn-primary"
-                onClick={(): void => this.authViewModel.onClickSignIn()}
+                onClick={(): void => this.props.authViewModel.onClickSignIn()}
               >
                 Sign in
               </button>
@@ -135,7 +77,7 @@ export default class AuthComponent extends React.Component<AuthComponentProps, A
               <button
                 type="button"
                 className="col btn btn-primary"
-                onClick={(): void => this.authViewModel.onClickSignOut()}
+                onClick={(): void => this.props.authViewModel.onClickSignOut()}
               >
                 Sign out
               </button>

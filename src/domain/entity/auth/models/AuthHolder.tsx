@@ -1,29 +1,25 @@
-import AuthListener from './AuthListener';
+import { computed, observable } from 'mobx';
 
 export default class AuthHolder {
-  private authListeners: AuthListener[];
-  private isAuthorized: boolean;
-  private authToken: string;
+  @observable private isAuthorized: boolean;
+  @observable private authToken: string;
 
   public constructor() {
     this.isAuthorized = false;
-    this.authListeners = [];
     this.authToken = '';
   }
 
   public onSignedIn(authToken: string): void {
     this.isAuthorized = true;
     this.authToken = authToken;
-    this.notifyListeners();
   }
 
   public onSignedOut(): void {
     this.isAuthorized = false;
     this.authToken = '';
-    this.notifyListeners();
   }
 
-  public isUserAuthorized(): boolean {
+  @computed public get isUserAuthorized(): boolean {
     return this.isAuthorized;
   }
 
@@ -36,17 +32,5 @@ export default class AuthHolder {
     }
 
     return this.authToken;
-  }
-
-  public addAuthListener(authListener: AuthListener): void {
-    this.authListeners.push(authListener);
-  }
-
-  public removeAuthListener(authListener: AuthListener): void {
-    this.authListeners.splice(this.authListeners.indexOf(authListener), 1);
-  }
-
-  private notifyListeners(): void {
-    this.authListeners.forEach((listener) => listener.onAuthChanged());
   }
 }

@@ -1,6 +1,4 @@
-import BaseViewModel from '../BaseViewModel';
-
-export default interface AuthViewModel extends BaseViewModel {
+export default interface AuthViewModel {
   emailQuery: string;
   passwordQuery: string;
   isSignInButtonVisible: boolean;
