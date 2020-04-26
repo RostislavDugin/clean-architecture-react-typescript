@@ -1,5 +1,5 @@
 import React from 'react';
-import './app.css';
+import './App.css';
 import AuthComponent from './presentation/view/auth/AuthComponent';
 import AuthViewModelImpl from './presentation/view-model/auth/AuthViewModelImpl';
 import AuthFakeApi from './data/auth/AuthFakeApi';
