@@ -1,3 +1,6 @@
+![alt text](https://hsto.org/webt/q7/ls/cw/q7lscw7mpm4ex_ivtew-qlanrkw.jpeg)
+
+
 The Clear Architecture usign React and Typescript
 ---
 
