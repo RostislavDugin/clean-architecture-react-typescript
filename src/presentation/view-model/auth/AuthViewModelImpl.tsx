@@ -35,16 +35,16 @@ export default class AuthViewModelImpl implements AuthViewModel, AuthListener {
 
     this.loginUseCase = loginUseCase;
     this.authHolder = authHolder;
+
+    this.authHolder.addAuthListener(this);
   }
 
   public attachView = (baseView: BaseView): void => {
     this.baseView = baseView;
-    this.authHolder.addAuthListener(this);
   };
 
   public detachView = (): void => {
     this.baseView = undefined;
-    this.authHolder.removeAuthListener(this);
   };
 
   public onAuthChanged = (): void => {
