@@ -23,7 +23,7 @@ export default class AuthHolder {
     this.notifyListeners();
   }
 
-  public isUserAuthorized(): boolean {
+  public get isUserAuthorized(): boolean {
     return this.isAuthorized;
   }
 
