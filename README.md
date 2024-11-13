@@ -1,7 +1,7 @@
 ![alt text](https://hsto.org/webt/q7/ls/cw/q7lscw7mpm4ex_ivtew-qlanrkw.jpeg)
 
-# The article is outdated!!!
-# Use https://feature-sliced.design/ instead.
+### The article is outdated!!!
+### Use https://feature-sliced.design/ instead.
 
 
 The Clear Architecture usign React and Typescript
