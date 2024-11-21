@@ -8,14 +8,9 @@ import FormValidator from '../../util/FormValidator';
 export default class AuthViewModelImpl implements AuthViewModel, AuthListener {
   public emailQuery: string;
   public passwordQuery: string;
-  public isSignInButtonVisible: boolean;
-  public isSignOutButtonVisible: boolean;
 
   public isShowError: boolean;
   public errorMessage: string;
-
-  public authStatus: string;
-  public isAuthStatusPositive: boolean;
 
   private baseView?: BaseView;
   private loginUseCase: LoginUseCase;
@@ -24,14 +19,9 @@ export default class AuthViewModelImpl implements AuthViewModel, AuthListener {
   public constructor(loginUseCase: LoginUseCase, authHolder: AuthHolder) {
     this.emailQuery = '';
     this.passwordQuery = '';
-    this.isSignInButtonVisible = true;
-    this.isSignOutButtonVisible = false;
 
     this.isShowError = false;
     this.errorMessage = '';
-
-    this.authStatus = 'is not authorized';
-    this.isAuthStatusPositive = false;
 
     this.loginUseCase = loginUseCase;
     this.authHolder = authHolder;
@@ -47,19 +37,23 @@ export default class AuthViewModelImpl implements AuthViewModel, AuthListener {
     this.baseView = undefined;
   };
 
-  public onAuthChanged = (): void => {
-    if (this.authHolder.isUserAuthorized()) {
-      this.isSignInButtonVisible = false;
-      this.isSignOutButtonVisible = true;
-      this.authStatus = 'authorized';
-      this.isAuthStatusPositive = true;
-    } else {
-      this.isSignInButtonVisible = true;
-      this.isSignOutButtonVisible = false;
-      this.authStatus = 'is not autorized';
-      this.isAuthStatusPositive = false;
-    }
+  public get isSignInButtonVisible() {
+    return !this.authHolder.isUserAuthorized
+  }
 
+  public get isSignOutButtonVisible() {
+    return this.authHolder.isUserAuthorized
+  }
+
+  public get authStatus() {
+    return this.authHolder.isUserAuthorized ? 'authorized' : 'is not autorized';
+  }
+
+  public get isAuthStatusPositive() {
+    return this.authHolder.isUserAuthorized
+  }
+
+  public onAuthChanged = (): void => {
     this.notifyViewAboutChanges();
   };
 
